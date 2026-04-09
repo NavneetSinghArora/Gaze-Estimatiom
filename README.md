@@ -1,10 +1,13 @@
-# FAZE: Few-Shot Adaptive Gaze Estimation
+# FAZE: Few-Shot Adaptive Gaze Estimation (Adaptation)
 
 [![Paper](https://img.shields.io/badge/arXiv-1905.01941-B31B1B.svg)](https://arxiv.org/abs/1905.01941)
 [![Conference](https://img.shields.io/badge/ICCV-2019-blue.svg)](http://openaccess.thecvf.com/content_ICCV_2019/papers/Park_Few-Shot_Adaptive_Gaze_Estimation_ICCV_2019_paper.pdf)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-FAZE is a framework for few-shot adaptation of gaze estimation networks, consisting of equivariance learning (via the **DT-ED** or Disentangling Transforming Encoder-Decoder architecture) and meta-learning with gaze-direction embeddings as input. This repository contains the official implementation of our ICCV 2019 Oral presentation.
+This repository is an adaptation and inspired implementation of the **FAZE** framework, originally presented as an Oral presentation at ICCV 2019. FAZE is a framework for few-shot adaptation of gaze estimation networks, consisting of equivariance learning (via the **DT-ED** architecture) and meta-learning with gaze-direction embeddings as input.
+
+> [!NOTE]
+> This is a personal adaptation and implementation based on the work by Park et al. For the official original repository, please refer to the links below.
 
 ![The FAZE Framework](https://ait.ethz.ch/projects/2019/faze/banner.jpg)
 
