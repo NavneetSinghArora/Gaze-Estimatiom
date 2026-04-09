@@ -1,96 +1,112 @@
-# Updates
-
-Release 09/22/2020
-* Incorporated (a) distributed data parallel trainng and (b) fusedSGD optimizer, resulting in 2x faster training.
-
 # FAZE: Few-Shot Adaptive Gaze Estimation
 
-This repository contains the code for training and evaluation of our ICCV 2019 work, which was presented as an Oral presentation. FAZE is a framework for few-shot adaptation of gaze estimation networks, consisting of equivariance learning (via the **DT-ED** or Disentangling Transforming Encoder-Decoder architecture) and meta-learning with gaze-direction embeddings as input.
+[![Paper](https://img.shields.io/badge/arXiv-1905.01941-B31B1B.svg)](https://arxiv.org/abs/1905.01941)
+[![Conference](https://img.shields.io/badge/ICCV-2019-blue.svg)](http://openaccess.thecvf.com/content_ICCV_2019/papers/Park_Few-Shot_Adaptive_Gaze_Estimation_ICCV_2019_paper.pdf)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
+FAZE is a framework for few-shot adaptation of gaze estimation networks, consisting of equivariance learning (via the **DT-ED** or Disentangling Transforming Encoder-Decoder architecture) and meta-learning with gaze-direction embeddings as input. This repository contains the official implementation of our ICCV 2019 Oral presentation.
 
 ![The FAZE Framework](https://ait.ethz.ch/projects/2019/faze/banner.jpg)
 
+---
 
-## Links
-* [NVIDIA Project Page](https://research.nvidia.com/publication/2019-10_Few-Shot-Adaptive-Gaze)
-* [ETH Zurich Project Page](https://ait.ethz.ch/projects/2019/faze/)
-* [arXiv Page](https://arxiv.org/abs/1905.01941)
-* [CVF Open Access PDF](http://openaccess.thecvf.com/content_ICCV_2019/papers/Park_Few-Shot_Adaptive_Gaze_Estimation_ICCV_2019_paper.pdf)
-* [ICCV 2019 Presentation](https://conftube.com/video/ByfFufRhuRc?tocitem=17)
-* [Pre-processing Code GitHub Repository](https://github.com/swook/faze_preprocess) _(also included as a submodule in this repository)_
+## 🔗 Quick Links
+* **Research Pages:** [NVIDIA Project Page](https://research.nvidia.com/publication/2019-10_Few-Shot-Adaptive-Gaze) | [ETH Zurich Project Page](https://ait.ethz.ch/projects/2019/faze/)
+* **Media:** [ICCV 2019 Presentation](https://conftube.com/video/ByfFufRhuRc?tocitem=17) | [PDF Paper](http://openaccess.thecvf.com/content_ICCV_2019/papers/Park_Few-Shot_Adaptive_Gaze_Estimation_ICCV_2019_paper.pdf)
+* **Code:** [Pre-processing Repository](https://github.com/swook/faze_preprocess)
 
+---
 
-## Training and Evaluation
+## 🚀 Getting Started
 
-### 1. Datasets
+### 1. Repository Setup
 
-Pre-process the *GazeCapture* and *MPIIGaze* datasets using the code-base at https://github.com/swook/faze_preprocess which is also available as a git submodule at the relative path, `preprocess/`.
-
-If you have already cloned this `few_shot_gaze` repository without pulling the submodules, please run:
-
-    git submodule update --init --recursive
-
-After the dataset preprocessing procedures have been performed, we can move on to the next steps.
+Clone the repository and initialize submodules:
+```bash
+git clone https://github.com/NavneetSinghArora/Gaze-Estimatiom.git
+cd Gaze-Estimatiom
+git submodule update --init --recursive
+```
 
 ### 2. Prerequisites
+This codebase is tested on Linux (Ubuntu). 
 
-This codebase should run on most standard Linux systems. We specifically used Ubuntu 
+- **CUDA-enabled GPU** (V100 recommended for full training)
+- **Python 3.x**
+- **PyTorch 1.3+**
+- **NVIDIA Apex** (Required for fusedSGD and DDP training)
 
-Please install the following prerequisites manually (as well as their dependencies), by following the instructions found below:
-* PyTorch 1.3 - https://pytorch.org/get-started/locally/
-* NVIDIA Apex - https://github.com/NVIDIA/apex#quick-start 
-  * *please note that only NVIDIA Volta and newer architectures can benefit from AMP training via NVIDIA Apex.*
+Install Python dependencies:
+```bash
+pip install -r requirements.txt
+```
 
-The remaining Python package dependencies can be installed by running:
+### 3. Data Preparation
+Pre-process *GazeCapture* and *MPIIGaze* datasets using the provided submodule in `preprocess/`. For detailed instructions, see [README_preprocess.md](README_preprocess.md).
 
-    pip3 install --user --upgrade -r requirements.txt
+---
 
-### 3. Pre-trained weights for the DT-ED architecture and MAML models
+## 🏋️ Training & Evaluation
 
-You can obtain a copy of the pre-trained weights for the Disentangling Transforming Encoder-Decoder and for the various MAML models from the following location.
+### Download Pre-trained Weights
+If you want to skip training from scratch, download the pre-trained weights for DT-ED and MAML models:
+```bash
+cd src/
+wget -N https://ait.ethz.ch/projects/2019/faze/downloads/outputs_of_full_train_test_and_plot.zip
+unzip -o outputs_of_full_train_test_and_plot.zip
+```
 
-    cd src/
-    wget -N https://ait.ethz.ch/projects/2019/faze/downloads/outputs_of_full_train_test_and_plot.zip
-    unzip -o outputs_of_full_train_test_and_plot.zip
+### Execution Flow
+For a complete demonstration of the pipeline, refer to the Jupyter Notebook:
+👉 `Few_Shot_Gaze_Actual_Execution.ipynb`
 
-### 4. Training, Meta-Learning, and Final Evaluation
+Alternatively, run the all-in-one script:
+```bash
+cd src/
+bash full_train_test_and_plot.bash
+```
 
-Run the all-in-one example bash script with:
+### Script Breakdown
+- `1_train_dt_ed.py`: Trains the Disentangling Transforming Encoder-Decoder.
+- `2_meta_learning.py`: Performs Meta-Learning for few-shot adaptation.
+- `3_combine_maml_results.py`: Aggregates and plots evaluation metrics.
 
-    cd src/
-    bash full_train_test_and_plot.bash
+---
 
-The bash script should be self-explanatory and can be edited to replicate the final FAZE model evaluation procedure, given that hardware requirements are satisfied (8x GPUs, where each are Tesla V100 GPUs with 32GB of memory).
+## 🎥 Realtime Demo
+A live webcam demo is available in the `demo/` folder.
+Check [demo/README.md](demo/README.md) for detailed setup and usage instructions.
 
-The pre-trained DT-ED weights should be loaded automatically by the script `1_train_dt_ed.py`. Please note that this model can take a long time to train when training from scratch, so we recommend adjusting batch sizes and the using multiple GPUs (the code is multi-GPU-ready).
+```bash
+cd demo/
+python run_demo.py
+```
 
-The Meta-Learning step is also very time consuming, particularly because it must be run for every value of `k` or *number of calibration samples*. The code pertinent to this step is `2_meta_learning.py`, and its execution is recommended to be done in parallel as shown in `full_train_test_and_plot.bash`.
+---
 
-### 5. Outputs
+## 📂 Project Structure
+- `src/`: Core training and evaluation scripts.
+- `demo/`: Real-time webcam demo implementation.
+- `preprocess/`: Data preprocessing scripts (submodule).
+- `Few-Shot_Adaptive_Gaze_Estimation.pdf`: Research paper for reference.
 
-When the full pipeline successfully runs, you will find some outputs in the path `src/outputs_of_full_train_test_and_plot`, in particular:
-* **walks/**: mp4 videos of latent space walks in gaze direction and head orientation
-* **Zg_OLR1e-03_IN5_ILR1e-05_Net64/**: outputs of the meta-learning step.
-* **Zg_OLR1e-03_IN5_ILR1e-05_Net64 MAML MPIIGaze.pdf**: plotted results of the few-shot learning evaluations on MPIIGaze.
-* **Zg_OLR1e-03_IN5_ILR1e-05_Net64 MAML GazeCapture (test).pdf**: plotted results of the few-shot learning evaluations on the GazeCapture test set.
+---
 
-## Realtime Demo
+## 📜 Citation
+If you find this work useful in your research, please cite our paper:
 
-We also provide a realtime demo that runs with live input from a webcam in the `demo/` folder. Please check the separate
-[demo instructions](https://github.com/NVlabs/few_shot_gaze/blob/master/demo/README.md) for details of 
-how to setup and run it.
+```bibtex
+@inproceedings{Park2019ICCV,
+  author    = {Seonwook Park and Shalini De Mello and Pavlo Molchanov and Umar Iqbal and Otmar Hilliges and Jan Kautz},
+  title     = {Few-Shot Adaptive Gaze Estimation},
+  year      = {2019},
+  booktitle = {International Conference on Computer Vision (ICCV)},
+  location  = {Seoul, Korea}
+}
+```
 
+---
 
-## Bibtex
-Please cite our paper when referencing or using our code.
-
-    @inproceedings{Park2019ICCV,
-      author    = {Seonwook Park and Shalini De Mello and Pavlo Molchanov and Umar Iqbal and Otmar Hilliges and Jan Kautz},
-      title     = {Few-Shot Adaptive Gaze Estimation},
-      year      = {2019},
-      booktitle = {International Conference on Computer Vision (ICCV)},
-      location  = {Seoul, Korea}
-    }
-
-
-## Acknowledgements
+## 🤝 Acknowledgements
 Seonwook Park carried out this work during his internship at NVIDIA. This work was supported in part by the ERC Grant OPTINT (StG-2016-717054).
+
