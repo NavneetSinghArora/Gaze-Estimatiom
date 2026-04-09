@@ -9,8 +9,6 @@ This repository is an adaptation and inspired implementation of the **FAZE** fra
 > [!NOTE]
 > This is a personal adaptation and implementation based on the work by Park et al. For the official original repository, please refer to the links below.
 
-![The FAZE Framework](https://ait.ethz.ch/projects/2019/faze/banner.jpg)
-
 ---
 
 ## 🔗 Quick Links
